@@ -3,11 +3,10 @@ const extractAliasFromConfig = require("./extract-alias-from-config");
 const babelCore = require("@babel/core");
 const traverse = require("@babel/traverse").default;
 
-const examplePath = "./examples/index.js";
 const configPath = "./forge.config.json";
 
-module.exports = async () => {
-  const sourceCode = await readContentFromFile(examplePath, "string");
+module.exports = async (path) => {
+  const sourceCode = await readContentFromFile(path, "string");
   const jsonConfig = await readContentFromFile(configPath, "json");
   const aliases = await extractAliasFromConfig(jsonConfig);
 
