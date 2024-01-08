@@ -17,7 +17,7 @@ module.exports = async () => {
     ]
   });
 
-  const classesInUse = [];
+  const classesInUse = {};
 
   traverse(astNode, {
     JSXAttribute: function(path) {
@@ -25,15 +25,21 @@ module.exports = async () => {
       if (classAttribute === "className") {
         const valueAttribute = path.node.value.value;
         const classes = valueAttribute.split(" ");
-        const inUse = classes.filter((className) => {
-          return aliases.some(alias => {
-            if (alias === className) return true
-            const regexPattern = new RegExp(`${alias}-\\d+`);
-            if (regexPattern.test(className)) return true;
-            return false;
+        Object.entries(aliases).forEach(
+          ([key, aliasArray]) => {
+            const currentClassesInUse = aliasArray.filter(alias => {
+              return classes.some((className) => {
+                if (alias === className) return true
+                const regexPattern = new RegExp(`${alias}-\\d+`);
+                if (regexPattern.test(className)) return true;
+                return false;
+              });
+            });
+            if (currentClassesInUse.length) {
+              classesInUse[key] = [...classesInUse[key] || [], ...currentClassesInUse]
+            }
+            return classesInUse;
           });
-        })
-        classesInUse.push(...inUse);
       }
     },
   });

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Handlebars = require("handlebars");
+const identifyClasses = require("./src/identify-classes.js");
 
 const ReadConfigFile = () => {
   return new Promise((resolve, reject) => {
@@ -49,6 +50,7 @@ const generateClassesWithSizes = (section, space, name, unit) => {
 
 const init = async () => {
   try {
+    const classesInUse = identifyClasses();
     const config = await ReadConfigFile();
     const marginClassesWithPx = generateClassesWithSizes(config.margin, config.size.px, "margin", "px");
     const padddingClassesWithPx = generateClassesWithSizes(config.padding, config.size.px, "padding", "px");

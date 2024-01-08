@@ -1,25 +1,30 @@
 module.exports = async (config) => {
-  const result = [];
+  const result = {};
 
-  const checkValue = async (propertyValue) => {
+  const checkValue = async (propertyKey, propertyValue, parentKey) => {
     return new Promise((resolve) => {
 
       if (typeof propertyValue === "object") {
-        Object.values(propertyValue).forEach(async (val) => {
-          await checkValue(val);
+        Object.entries(propertyValue).forEach(async ([key, val]) => {
+          await checkValue(key, val, propertyKey);
         });
       }
 
       if (typeof propertyValue === "string") {
-        result.push(propertyValue);
+        if (result[parentKey]) {
+          result[parentKey].push(propertyValue);
+        } else {
+          result[parentKey] = [propertyValue];
+        }
+
         resolve();
       }
 
     });
   }
 
-  Object.values(config).forEach(async (val) => {
-    await checkValue(val);
+  Object.entries(config).forEach(async ([key, val]) => {
+    await checkValue(key, val);
   });
   return result;
 }
