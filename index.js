@@ -21,11 +21,11 @@ const writeToFile = (content) => {
   });
 }
 
-const generateClassesWithSizes = (section, space, name, unit) => {
-  if (!section) throw `${name} is undefined, please add ${name} to your forge.config.json"`
+const generateClassesWithSizes = (classesInUse, space, name, unit) => {
+  if (!classesInUse) throw `${name} is undefined, please add ${name} to your forge.config.json"`
 
-  const properties = Object.entries(section).map(([cssProperty, alias]) => {
-    return { cssProperty, alias }
+  const properties = classesInUse.map((alias) => {
+    return { cssProperty: name, alias }
   });
 
   const margingTemplate = `
@@ -50,10 +50,10 @@ const generateClassesWithSizes = (section, space, name, unit) => {
 
 const init = async () => {
   try {
-    const classesInUse = identifyClasses();
+    const classesInUse = await identifyClasses();
     const config = await ReadConfigFile();
-    const marginClassesWithPx = generateClassesWithSizes(config.margin, config.size.px, "margin", "px");
-    const padddingClassesWithPx = generateClassesWithSizes(config.padding, config.size.px, "padding", "px");
+    const marginClassesWithPx = generateClassesWithSizes(classesInUse.margin, config.size.px, "margin", "px");
+    const padddingClassesWithPx = generateClassesWithSizes(classesInUse.padding, config.size.px, "padding", "px");
     await writeToFile(marginClassesWithPx + padddingClassesWithPx);
     console.log("Your customized classes are generated, check forge.css");
   } catch (error) {
