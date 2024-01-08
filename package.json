@@ -1,0 +1,29 @@
+{
+  "name": "forgecss",
+  "version": "0.1.0",
+  "description": "Generate customized and usefull CSS classes for your web project.",
+  "main": "intex.js",
+  "scripts": {
+    "build": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "css",
+    "generate",
+    "customize"
+  ],
+  "author": "Igor Pieruccini",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "7.23.3",
+    "handlebars": "4.7.8"
+  },
+  "devDependencies": {
+    "@babel/core": "7.23.7",
+    "@babel/parser": "7.23.6",
+    "@babel/plugin-transform-react-jsx": "7.23.4",
+    "@babel/preset-env": "7.23.7",
+    "@babel/preset-react": "7.23.3",
+    "@babel/traverse": "7.23.7"
+  }
+}
