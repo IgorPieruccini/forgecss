@@ -5,14 +5,16 @@
     "jsx",
     "tsx"
   ],
-  "template": {
+  "variant": {
     "size": {
       "px": [
         2,
         4,
         8
       ]
-    },
+    }
+  },
+  "alias": {
     "margin": {
       "margin": "m",
       "margin-bottom": "mb",
@@ -26,6 +28,8 @@
       "padding-top": "pt",
       "padding-left": "pl",
       "padding-right": "pr"
-    }
+    },
+    "flex": "flex",
+    "justify-content": "jc"
   }
 }

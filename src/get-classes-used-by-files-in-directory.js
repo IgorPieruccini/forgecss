@@ -6,7 +6,7 @@ module.exports = async (config) => {
   const filesPath = getFilesWithExtension(config.sourceDir, config.fileExtensions);
   for (let x = 0; x < filesPath.length; x++) {
     const path = filesPath[x];
-    const classesInUse = await identifyClasses(path, config.template);
+    const classesInUse = await identifyClasses(path, config.alias);
     Object.entries(classesInUse).forEach(([key, value]) => {
       const joinedArray = [...(classes[key] || []), ...value]
       classes[key] = [...new Set(joinedArray)];

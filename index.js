@@ -7,8 +7,8 @@ const init = async () => {
   try {
     const config = await readContentFromFile("./forge.config.json", "json");
     const classesInUse = await getClassesUsedByFilesInDirectory(config);
-    const marginClassesWithPx = generateTemplate.withUnit(classesInUse.margin, config.template.size.px, "margin", "px");
-    const padddingClassesWithPx = generateTemplate.withUnit(classesInUse.padding, config.template.px, "padding", "px");
+    const marginClassesWithPx = generateTemplate.withUnit(classesInUse.margin, config.variant.size.px, "margin", "px");
+    const padddingClassesWithPx = generateTemplate.withUnit(classesInUse.padding, config.variant.size.px, "padding", "px");
     await writeToFile(marginClassesWithPx + padddingClassesWithPx, config.outDir);
     console.log("Your customized classes are generated, check forge.css");
   } catch (error) {
