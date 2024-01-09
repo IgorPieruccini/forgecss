@@ -11,8 +11,8 @@ const getClassesUsedByFilesInDirectory = async (directory) => {
     const path = filesPath[x];
     const classesInUse = await identifyClasses(path);
     Object.entries(classesInUse).forEach(([key, value]) => {
-      // todo: avoid duplicating aliases
-      classes[key] = [...(classes[key] || []), ...value]
+      const joinedArray = [...(classes[key] || []), ...value]
+      classes[key] = [...new Set(joinedArray)];
     });
   };
   return classes;
