@@ -1,22 +1,7 @@
-const identifyClasses = require("./src/identify-classes.js");
 const readContentFromFile = require("./src/read-content-from-file.js");
 const writeToFile = require("./src/write-to-file.js");
 const generateTemplate = require("./src/generate-template.js");
-const getFilesWithExtension = require("./src/get-files-with-extension.js");
-
-const getClassesUsedByFilesInDirectory = async (directory) => {
-  const classes = {};
-  const filesPath = getFilesWithExtension(directory, [".jsx", ".tsx"]);
-  for (let x = 0; x < filesPath.length; x++) {
-    const path = filesPath[x];
-    const classesInUse = await identifyClasses(path);
-    Object.entries(classesInUse).forEach(([key, value]) => {
-      const joinedArray = [...(classes[key] || []), ...value]
-      classes[key] = [...new Set(joinedArray)];
-    });
-  };
-  return classes;
-}
+const getClassesUsedByFilesInDirectory = require("./src/get-classes-used-by-files-in-directory.js");
 
 const init = async () => {
   try {
