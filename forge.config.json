@@ -1,6 +1,10 @@
 {
   "sourceDir": "./examples/",
-  "outDir": "./forge.test.css",
+  "outDir": "./forge.css",
+  "fileExtensions": [
+    "jsx",
+    "tsx"
+  ],
   "size": {
     "px": [
       2,
