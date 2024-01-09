@@ -5,25 +5,27 @@
     "jsx",
     "tsx"
   ],
-  "size": {
-    "px": [
-      2,
-      4,
-      8
-    ]
-  },
-  "margin": {
-    "margin": "m",
-    "margin-bottom": "mb",
-    "margin-top": "mt",
-    "margin-left": "ml",
-    "margin-right": "mr"
-  },
-  "padding": {
-    "padding": "p",
-    "padding-bottom": "pb",
-    "padding-top": "pt",
-    "padding-left": "pl",
-    "padding-right": "pr"
+  "template": {
+    "size": {
+      "px": [
+        2,
+        4,
+        8
+      ]
+    },
+    "margin": {
+      "margin": "m",
+      "margin-bottom": "mb",
+      "margin-top": "mt",
+      "margin-left": "ml",
+      "margin-right": "mr"
+    },
+    "padding": {
+      "padding": "p",
+      "padding-bottom": "pb",
+      "padding-top": "pt",
+      "padding-left": "pl",
+      "padding-right": "pr"
+    }
   }
 }

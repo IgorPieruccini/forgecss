@@ -3,12 +3,9 @@ const extractAliasFromConfig = require("./extract-alias-from-config");
 const babelCore = require("@babel/core");
 const traverse = require("@babel/traverse").default;
 
-const configPath = "./forge.config.json";
-
-module.exports = async (path) => {
+module.exports = async (path, configTemplate) => {
   const sourceCode = await readContentFromFile(path, "string");
-  const jsonConfig = await readContentFromFile(configPath, "json");
-  const aliases = await extractAliasFromConfig(jsonConfig);
+  const aliases = await extractAliasFromConfig(configTemplate);
 
   const astNode = babelCore.parseSync(sourceCode, {
     plugins: [
