@@ -1,4 +1,6 @@
 {
+  "sourceDir": "./examples/",
+  "outDir": "./forge.test.css",
   "size": {
     "px": [
       2,

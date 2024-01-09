@@ -5,11 +5,11 @@ const getClassesUsedByFilesInDirectory = require("./src/get-classes-used-by-file
 
 const init = async () => {
   try {
-    const classesInUse = await getClassesUsedByFilesInDirectory("./examples/");
     const config = await readContentFromFile("./forge.config.json", "json");
+    const classesInUse = await getClassesUsedByFilesInDirectory(config.sourceDir);
     const marginClassesWithPx = generateTemplate.withUnit(classesInUse.margin, config.size.px, "margin", "px");
     const padddingClassesWithPx = generateTemplate.withUnit(classesInUse.padding, config.size.px, "padding", "px");
-    await writeToFile(marginClassesWithPx + padddingClassesWithPx, "forge.css");
+    await writeToFile(marginClassesWithPx + padddingClassesWithPx, config.outDir);
     console.log("Your customized classes are generated, check forge.css");
   } catch (error) {
     console.log(error);
