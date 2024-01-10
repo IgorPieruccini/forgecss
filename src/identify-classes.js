@@ -13,7 +13,8 @@ module.exports = async (path, configAlias) => {
     ]
   });
 
-  const classesInUse = {};
+  const aliasInUse = {};
+  const cssVariablesInUse = [];
 
   traverse(astNode, {
     JSXAttribute: function(path) {
@@ -27,18 +28,25 @@ module.exports = async (path, configAlias) => {
               return classes.some((className) => {
                 if (alias === className) return true
                 const regexPattern = new RegExp(`${alias}-[a-zA-Z0-9]+$`);
-                if (regexPattern.test(className)) return true;
+                const regexPatternCssVariable = new RegExp(`${alias}-(.*?)( |$)`);
+                if (regexPattern.test(className)) {
+                  const cssVar = regexPatternCssVariable.exec(className)[1];
+                  if (cssVar) {
+                    cssVariablesInUse.push(cssVar);
+                  }
+                  return true;
+                }
                 return false;
               });
             });
             if (currentClassesInUse.length) {
-              classesInUse[key] = [...classesInUse[key] || [], ...currentClassesInUse]
+              aliasInUse[key] = [...aliasInUse[key] || [], ...currentClassesInUse]
             }
-            return classesInUse;
+            return aliasInUse;
           });
       }
     },
   });
 
-  return classesInUse;
+  return { aliasInUse, cssVariablesInUse };
 }

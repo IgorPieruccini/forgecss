@@ -7,17 +7,9 @@
   ],
   "variant": {
     "px": [
-      2,
-      4,
-      8
-    ],
-    "placement": [
-      "center",
-      "start",
-      "end",
-      "space-between",
-      "space-around",
-      "spave-evenly"
+      "2",
+      "4",
+      "8"
     ]
   },
   "alias": {
@@ -37,6 +29,7 @@
     },
     "flex": "flex",
     "justify-content": "justify-to",
+    "flex-direction": "flex-dir",
     "align-items": "align-to"
   }
 }

@@ -1,6 +1,6 @@
 const Handlebars = require("handlebars");
 
-const withUnit = (classesInUse, space, name, unit) => {
+const withUnit = (classesInUse, cssVariants, name, unit) => {
   if (!classesInUse) throw `${name} is undefined, please add ${name} to your forge.config.json"`
 
   const properties = classesInUse.map((alias) => {
@@ -9,7 +9,7 @@ const withUnit = (classesInUse, space, name, unit) => {
 
   const margingTemplate = `
 {{#each properties}}
-{{#each ../space}}
+{{#each ../cssVariants}}
 .{{../this.alias}}-{{this}} {
   {{../this.cssProperty}}: {{this}}{{../this.unit}} 
 }
@@ -20,14 +20,14 @@ const withUnit = (classesInUse, space, name, unit) => {
   const template = Handlebars.compile(margingTemplate);
   const result = template({
     properties,
-    space,
+    cssVariants,
     unit
   });
 
   return result;
 }
 
-const withPlacement = (classesInUse, space, name) => {
+const withPlacement = (classesInUse, cssVariants, name) => {
   if (!classesInUse) throw `${name} is undefined, please add ${name} to your forge.config.json"`
 
   const properties = classesInUse.map((alias) => {
@@ -36,7 +36,7 @@ const withPlacement = (classesInUse, space, name) => {
 
   const margingTemplate = `
 {{#each properties}}
-{{#each ../space}}
+{{#each ../cssVariants}}
 .{{../this.alias}}-{{this}} {
   {{../this.cssProperty}}: {{this}}; 
 }
@@ -47,7 +47,7 @@ const withPlacement = (classesInUse, space, name) => {
   const template = Handlebars.compile(margingTemplate);
   const result = template({
     properties,
-    space,
+    cssVariants,
   });
 
   return result;
