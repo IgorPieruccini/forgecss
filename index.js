@@ -7,6 +7,7 @@ const variantMap = {
   margin: ["px"],
   padding: ["px"],
   "justify-content": ["placement"],
+  "align-items": ["placement"]
 }
 
 const createTemplatesFromClassesInUse = (classesInUse, variants) => {
@@ -15,7 +16,7 @@ const createTemplatesFromClassesInUse = (classesInUse, variants) => {
     const currentVariants = variantMap[key];
 
     currentVariants?.forEach((variantKey) => {
-      const templateContent = generateTemplate.withUnit(value, variants[variantKey], key, variantKey);
+      const templateContent = generateTemplate[variantKey](value, variants[variantKey], key, variantKey);
       content = `${content} \n ${templateContent}`;
     });
 

@@ -36,6 +36,7 @@
       "padding-right": "pr"
     },
     "flex": "flex",
-    "justify-content": "jc"
+    "justify-content": "justify-to",
+    "align-items": "align-to"
   }
 }

@@ -26,7 +26,7 @@ module.exports = async (path, configAlias) => {
             const currentClassesInUse = aliasArray.filter(alias => {
               return classes.some((className) => {
                 if (alias === className) return true
-                const regexPattern = new RegExp(`${alias}-\\d+`);
+                const regexPattern = new RegExp(`${alias}-[a-zA-Z0-9]+$`);
                 if (regexPattern.test(className)) return true;
                 return false;
               });
