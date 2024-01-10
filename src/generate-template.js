@@ -5,14 +5,14 @@ module.exports = {
     if (!classesInUse) throw `${name} is undefined, please add ${name} to your forge.config.json"`
 
     const properties = classesInUse.map((alias) => {
-      return { cssProperty: name, alias }
+      return { cssProperty: name, alias, unit }
     });
 
     const margingTemplate = `
 {{#each properties}}
 {{#each ../space}}
 .{{../this.alias}}-{{this}} {
-  {{../this.cssProperty}}: {{this}}{{unit}}
+  {{../this.cssProperty}}: {{this}}{{../this.unit}} 
 }
 {{/each}}
 {{/each}}

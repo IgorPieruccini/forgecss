@@ -6,13 +6,19 @@
     "tsx"
   ],
   "variant": {
-    "size": {
-      "px": [
-        2,
-        4,
-        8
-      ]
-    }
+    "px": [
+      2,
+      4,
+      8
+    ],
+    "placement": [
+      "center",
+      "start",
+      "end",
+      "space-between",
+      "space-around",
+      "spave-evenly"
+    ]
   },
   "alias": {
     "margin": {

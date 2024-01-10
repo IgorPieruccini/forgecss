@@ -3,9 +3,9 @@ const extractAliasFromConfig = require("./extract-alias-from-config");
 const babelCore = require("@babel/core");
 const traverse = require("@babel/traverse").default;
 
-module.exports = async (path, configTemplate) => {
+module.exports = async (path, configAlias) => {
   const sourceCode = await readContentFromFile(path, "string");
-  const aliases = await extractAliasFromConfig(configTemplate);
+  const aliases = await extractAliasFromConfig(configAlias);
 
   const astNode = babelCore.parseSync(sourceCode, {
     plugins: [

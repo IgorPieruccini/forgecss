@@ -14,7 +14,7 @@ module.exports = async (config) => {
         if (result[parentKey]) {
           result[parentKey].push(propertyValue);
         } else {
-          result[parentKey] = [propertyValue];
+          result[propertyKey] = [propertyValue];
         }
 
         resolve();
