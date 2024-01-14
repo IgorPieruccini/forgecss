@@ -1,6 +1,7 @@
+#! /usr/bin/env node
+
 import { readContentFromFile } from "./src/read-content-from-file.js";
 import writeToFile from "./src/write-to-file.js";
-import generateTemplate from "./src/generate-template.js"
 import { getCssClassesUsedByAllFilesInDirectory } from "./src/get-classes-used-by-files-in-directory.js";
 import { createTemplatesFromClassesInUse } from "./src/create-template-from-classes-in-use.js";
 
