@@ -1,4 +1,15 @@
-module.exports = async (config) => {
+
+/** 
+  * Get all aliases inside the forge config
+  * @param {object} aliasConfig - The alias object inside the forgec config 
+  * @returns {object} An object with [parentKey] : [all aliases inside the key]
+  * @example
+   {
+        margin: ["m", "mb"],
+        padding: ["p", pb]
+   }
+  * */
+export const getAliasesFromForgeConfig = async (aliasConfig) => {
   const result = {};
 
   const checkValue = async (propertyKey, propertyValue, parentKey) => {
@@ -23,9 +34,10 @@ module.exports = async (config) => {
     });
   }
 
-  Object.entries(config).forEach(async ([key, val]) => {
+  Object.entries(aliasConfig).forEach(async ([key, val]) => {
     await checkValue(key, val);
   });
+
   return result;
 }
 

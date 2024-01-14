@@ -1,6 +1,12 @@
-const fs = require("fs");
+import fs from "fs";
 
-module.exports = async (filePath, format) => {
+/**
+ * Read content from a file.
+ * @param {string} filePath - The path of the file to read the content from.
+ * @param {string} format - The format of content (string | json).
+ * @returns {string | json} The content of the file
+ */
+export const readContentFromFile = async (filePath, format) => {
   return new Promise((response, reject) => {
     fs.readFile(filePath, (err, data) => {
       if (err) reject(err);

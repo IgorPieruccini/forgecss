@@ -1,4 +1,4 @@
-const Handlebars = require("handlebars");
+import Handlebars from "handlebars";
 
 const withUnit = (classesInUse, cssVariants, name, unit) => {
   if (!classesInUse) throw `${name} is undefined, please add ${name} to your forge.config.json"`
@@ -53,7 +53,7 @@ const withPlacement = (classesInUse, cssVariants, name) => {
   return result;
 }
 
-module.exports = {
+export default {
   px: withUnit,
   "%": withUnit,
   placement: withPlacement,

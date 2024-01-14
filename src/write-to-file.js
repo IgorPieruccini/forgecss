@@ -1,8 +1,15 @@
-const fs = require("fs");
+import { writeFile } from "fs";
 
-module.exports = (content, filePath) => {
+/**
+  * Write the content to file
+  * @param {string} content - The stringfy content
+  * @param {string} filePath - The filePath to write the content to
+  * if the file does not exist, it will be created
+  * @returns `Promise<void>`
+  */
+export default (content, filePath) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, content, (err) => {
+    writeFile(filePath, content, (err) => {
       if (err) reject(err);
       resolve();
     });

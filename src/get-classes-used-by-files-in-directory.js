@@ -1,24 +1,35 @@
-const identifyClasses = require("./identify-classes.js");
-const getFilesWithExtension = require("./get-files-with-extension.js");
+import { getFilesFromDirectory } from "./get-files-from-directory.js";
+import { getCssClassesUsedByFile } from "./get-css-classes-used-by-file.js";
 
-module.exports = async (config) => {
-  const classes = {};
-  let variables = [];
+/**
+  * Get all css files used by files inside a directory
+  * @param {object} config - The forge Config.
+  *
+  * Uses the sourceDir and fileExtensions from the config to look for files with classes included in alias object.
+  */
+export const getCssClassesUsedByAllFilesInDirectory = async (config) => {
+  const classesInUse = {};
+  let cssVariablesInUse = [];
 
-  const filesPath = getFilesWithExtension(config.sourceDir, config.fileExtensions);
+  const filesPath = getFilesFromDirectory(config.sourceDir, config.fileExtensions);
   for (let x = 0; x < filesPath.length; x++) {
     const path = filesPath[x];
-    const { aliasInUse, cssVariablesInUse } = await identifyClasses(path, config.alias);
-    const joinedVariables = [...variables, ...cssVariablesInUse];
-    variables = [...new Set(joinedVariables)];
-    Object.entries(aliasInUse).forEach(([key, value]) => {
-      const joinedAliasArray = [...(aliasInUse[key] || []), ...value]
-      classes[key] = [...new Set(joinedAliasArray)];
+    const {
+      classesInUse: classesInUseFromFile,
+      cssVariablesInUse: cssVariablesInUseFromFile,
+    } = await getCssClassesUsedByFile(path, config.alias);
+    // join the css variable of each file in one array
+    const joinedVariables = [
+      ...cssVariablesInUse,
+      ...cssVariablesInUseFromFile,
+    ];
+    cssVariablesInUse = [...new Set(joinedVariables)];
+    Object.entries(classesInUseFromFile).forEach(([key, value]) => {
+      // join the classes of each file in one array
+      const joinedAliasArray = [...(classesInUse[key] || []), ...value]
+      classesInUse[key] = [...new Set(joinedAliasArray)];
     });
   };
 
-  return {
-    classes,
-    variables
-  };
+  return { classesInUse, cssVariablesInUse };
 }

@@ -1,8 +1,9 @@
 {
   "name": "forgecss",
+  "type": "module",
   "version": "0.1.0",
   "description": "Generate customized and usefull CSS classes for your web project.",
-  "main": "intex.js",
+  "main": "index.js",
   "scripts": {
     "build": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
