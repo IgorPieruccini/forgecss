@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.1.0",
   "description": "Generate customized and usefull CSS classes for your web project.",
-  "main": "index.js",
+  "private": false,
   "bin": {
-    "forgecss": "./index.js"
+    "forgecss": ".bin/index.js"
   },
   "scripts": {
     "build": "webpack",
