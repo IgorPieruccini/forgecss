@@ -4,9 +4,7 @@
   "version": "0.1.0",
   "description": "Generate customized and usefull CSS classes for your web project.",
   "private": false,
-  "bin": {
-    "forgecss": ".bin/index.js"
-  },
+  "bin": "index.js",
   "scripts": {
     "build:prod": "node ./scripts/build.production.js",
     "test": "echo \"Error: no test specified\" && exit 1"
