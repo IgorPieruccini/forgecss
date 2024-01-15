@@ -4,31 +4,16 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default {
-  mode: 'production',
+  mode: 'development',
   entry: './index.js',
+  target: 'node',
   output: {
     path: resolve(__dirname, "bin"),
-    filename: "index.js"
+    filename: "[name].js"
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/, // Match JavaScript files
-        exclude: /node_modules/, // Exclude node_modules directory
-        use: {
-          loader: 'babel-loader', // Use Babel for transpiling JavaScript
-          options: {
-            presets: ['@babel/preset-env'], // Use preset-env for modern JavaScript
-          },
-        },
-      }
-    ]
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
-  resolve: {
-    fallback: {
-      "fs": false,
-      "path": false,
-      "assert": false
-    }
-  }
 }
