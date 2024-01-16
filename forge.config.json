@@ -1,5 +1,6 @@
 {
   "sourceDir": "./examples/",
+  "entry": "./examples/index.jsx",
   "outDir": "./forge.css",
   "fileExtensions": [
     "jsx",

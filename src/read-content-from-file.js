@@ -9,7 +9,10 @@ import fs from "fs";
 export const readContentFromFile = async (filePath, format) => {
   return new Promise((response, reject) => {
     fs.readFile(filePath, (err, data) => {
-      if (err) reject(err);
+      if (err) {
+        reject(err);
+        return;
+      };
       if (format === "string") {
         response(data.toString());
       }

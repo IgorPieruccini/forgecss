@@ -1,5 +1,6 @@
 import { getFilesFromDirectory } from "./get-files-from-directory.js";
 import { getCssClassesUsedByFile } from "./get-css-classes-used-by-file.js";
+import getImportStatementsFromEntryPoint from "./get-import-statements-from-entry-point.js";
 
 /**
   * Get all css files used by files inside a directory
@@ -10,6 +11,9 @@ import { getCssClassesUsedByFile } from "./get-css-classes-used-by-file.js";
 export const getCssClassesUsedByAllFilesInDirectory = async (config) => {
   const classesInUse = {};
   let cssVariablesInUse = [];
+
+  const urls = await getImportStatementsFromEntryPoint(config.entry, config.fileExtensions);
+  console.log({ urls });
 
   const filesPath = getFilesFromDirectory(config.sourceDir, config.fileExtensions);
   for (let x = 0; x < filesPath.length; x++) {
