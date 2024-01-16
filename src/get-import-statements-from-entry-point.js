@@ -52,7 +52,22 @@ export default async (entryPoint, fileExtensions) => {
 
     const includeExtension = pathIncludeFileExtention(filePath, fileExtensions);
     const sourceCodeDir = getSourceCodeDirectory(filePath);
-    const fileWithExtention = includeExtension ? filePath : `${filePath}.${getFileExtention(sourceCodeDir, filePath)}`;
+
+    let fileWithExtention = "";
+    if (includeExtension) {
+      fileWithExtention = filePath;
+    } else {
+      try {
+        const fileExtention = getFileExtention(sourceCodeDir, filePath);
+        fileWithExtention = `${filePath}.${fileExtention}`;
+      } catch (e) {
+        console.log(`skipping node package import`);
+        // return earlier as it's a node package imported
+        return;
+      }
+    }
+
+    fileWithExtention = includeExtension ? filePath : `${filePath}.${getFileExtention(sourceCodeDir, filePath)}`;
     console.log("--> ", fileWithExtention);
     urls.push(fileWithExtention);
 

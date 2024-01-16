@@ -9,7 +9,6 @@ import path from 'path';
   * */
 export const getFilesFromDirectory = (directoryPath, extensions) => {
   const files = fs.readdirSync(directoryPath);
-
   const filteredFiles = files.filter(file => {
     const filePath = path.join(directoryPath, file);
     const stat = fs.statSync(filePath);
