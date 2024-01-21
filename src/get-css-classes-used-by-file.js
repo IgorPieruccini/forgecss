@@ -2,6 +2,7 @@ import babelCore from "@babel/core";
 import traverse from "@babel/traverse";
 import { getAliasesFromForgeConfig } from "./get-aliases-from-forge-config.js";
 import { readContentFromFile } from "./read-content-from-file.js";
+import getAstFromFile from "./get-ast-from-file.js";
 
 /**
   * Get css classes used by file
@@ -10,12 +11,8 @@ import { readContentFromFile } from "./read-content-from-file.js";
   * @returns {object} Returns object with {classesInUse: [...], cssVariablesInUse: [...]}
   * */
 export const getCssClassesUsedByFile = async (path, configAlias) => {
-  const sourceCode = await readContentFromFile(path, "string");
+  const astNode = await getAstFromFile(path);
   const aliases = await getAliasesFromForgeConfig(configAlias);
-
-  const astNode = babelCore.parseSync(sourceCode, {
-    plugins: ["@babel/plugin-syntax-jsx"]
-  });
 
   const classesInUse = {};
   const cssVariablesInUse = [];
@@ -71,6 +68,7 @@ export const getCssClassesUsedByFile = async (path, configAlias) => {
       }
     },
   });
+  console.log({ classesInUse, cssVariablesInUse });
 
   return { classesInUse, cssVariablesInUse };
 }

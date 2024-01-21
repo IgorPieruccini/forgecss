@@ -1,14 +1,14 @@
-import babelCore from "@babel/core";
 import traverse from "@babel/traverse";
+import getAstFromFile from "./get-ast-from-file.js";
 
-export default async (sourceCode, extensions) => {
-  const astNode = babelCore.parseSync(sourceCode, {
-    plugins: ["@babel/plugin-syntax-jsx"]
-  });
+export default async (filepath, extensions) => {
+  console.log({ filepath });
+  const astNode = await getAstFromFile(filepath)
 
   const importUrls = [];
 
   traverse.default(astNode, {
+    enter() { },
     ImportDeclaration: (path) => {
       const importDecalrationUrl = path.node.source.value;
       if (extensions) {
@@ -24,5 +24,6 @@ export default async (sourceCode, extensions) => {
     }
   });
 
+  console.log({ importUrls });
   return importUrls;
 }

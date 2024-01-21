@@ -62,6 +62,7 @@ export default async (entryPoint, fileExtensions) => {
         fileWithExtention = `${filePath}.${fileExtention}`;
       } catch (e) {
         console.log(`skipping node package import`);
+        console.log(e);
         // return earlier as it's a node package imported
         return;
       }
@@ -71,8 +72,7 @@ export default async (entryPoint, fileExtensions) => {
     console.log("--> ", fileWithExtention);
     urls.push(fileWithExtention);
 
-    const sourceCode = await readContentFromFile(fileWithExtention, "string");
-    const importUrls = await getImportStatementsUrlFromFile(sourceCode);
+    const importUrls = await getImportStatementsUrlFromFile(fileWithExtention);
 
     for (let i = 0; i < importUrls.length; i++) {
       const url = importUrls[i];
