@@ -2,7 +2,6 @@ import traverse from "@babel/traverse";
 import getAstFromFile from "./get-ast-from-file.js";
 
 export default async (filepath, extensions) => {
-  console.log({ filepath });
   const astNode = await getAstFromFile(filepath)
 
   const importUrls = [];
@@ -24,6 +23,5 @@ export default async (filepath, extensions) => {
     }
   });
 
-  console.log({ importUrls });
   return importUrls;
 }

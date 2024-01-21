@@ -68,7 +68,6 @@ export const getCssClassesUsedByFile = async (path, configAlias) => {
       }
     },
   });
-  console.log({ classesInUse, cssVariablesInUse });
 
   return { classesInUse, cssVariablesInUse };
 }
