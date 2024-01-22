@@ -3,6 +3,7 @@ import getAstFromFile from "./get-ast-from-file.js";
 
 export default async (filepath, extensions) => {
   const astNode = await getAstFromFile(filepath)
+  if (!astNode) return [];
 
   const importUrls = [];
 

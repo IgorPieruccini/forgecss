@@ -4,20 +4,27 @@ import { readContentFromFile } from "./read-content-from-file.js";
 import babelCore from "@babel/core";
 
 export default async (path) => {
-  const sourceCode = await readContentFromFile(path, "string");
+  try {
+    const sourceCode = await readContentFromFile(path, "string");
+    const { name, ext } = getFileNameAndExtension(path);
 
-  const { name, ext } = getFileNameAndExtension(path);
+    if (!babelParserMapping[ext]) {
+      console.log("File not supported");
+      return;
+    }
 
-  if (!babelParserMapping[ext]) {
-    console.log("File not supported");
-    return;
+    const astNode = babelCore.parse(sourceCode, {
+      filename: name,
+      presets: babelParserMapping[ext].presets,
+      plugins: babelParserMapping[ext].plugins,
+    });
+
+    return astNode;
+
+  } catch (e) {
+    console.error(`Could not create ast from file: ${path}`);
+    console.log(e);
+    return null;
   }
 
-  const astNode = babelCore.parse(sourceCode, {
-    filename: name,
-    presets: babelParserMapping[ext].presets,
-    plugins: babelParserMapping[ext].plugins,
-  });
-
-  return astNode;
 }

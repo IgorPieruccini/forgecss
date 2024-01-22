@@ -22,6 +22,10 @@ export const getCssClassesUsedByFile = async (path, configAlias) => {
       const classAttribute = path.node.name.name;
       if (classAttribute === "className") {
         const valueAttribute = path.node.value.value;
+
+        // Forgecss does not support function inside className
+        if (path.node.value.type !== "StringLiteral") return;
+
         const classes = valueAttribute.split(" ");
 
         // only consider the classes that match the alias from the config

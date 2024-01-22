@@ -20,7 +20,6 @@ const getFileNameFromPath = (path) => {
 
 const getFileExtention = (sourceCodeDirectory, filePath) => {
   if (!sourceCodeDirectory) return filePath;
-  console.log({ sourceCodeDirectory, filePath })
   const filesInsideDirectoy = getFilesFromDirectory(sourceCodeDirectory, ["jsx", "tsx", "js", "ts"]);
   if (filesInsideDirectoy.length === 0) throw "Error: No file in the current directory"
   const fileName = getFileNameFromPath(filePath);
@@ -35,9 +34,6 @@ const pathIncludeFileExtention = (path, extention) => {
 
 const transformPathToAbsolute = (path) => {
   const currentPath = path.replace(/\b\.\//g, '/');
-  const pattern = /\.\.\//g;
-  const matches = currentPath.match(pattern);
-  const numberOfOccurrences = matches ? matches.length : 0;
 
   let parts = currentPath.split("/");
   for (let index = 0; index < parts.length; index++) {
@@ -68,7 +64,6 @@ export default async (entryPoint, fileExtensions) => {
     } else {
       try {
         const fileExtention = getFileExtention(sourceCodeDir, filePath);
-        fileWithExtention = `${filePath}.${fileExtention}`;
       } catch (e) {
         console.warn(`skipping node package import`, sourceCodeDir, filePath);
         // return earlier as it's a node package imported

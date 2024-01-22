@@ -11,7 +11,6 @@ export const babelParserMapping = {
       '@babel/plugin-proposal-object-rest-spread',
       "@babel/plugin-syntax-typescript",
       "@babel/plugin-transform-react-jsx",
-      "@babel/plugin-proposal-class-properties",
     ]
   },
   "jsx": {
@@ -24,7 +23,6 @@ export const babelParserMapping = {
       '@babel/plugin-proposal-object-rest-spread',
       "@babel/plugin-transform-react-jsx",
       "@babel/plugin-transform-class-properties",
-      "@babel/plugin-proposal-class-properties",
     ]
   },
   "js": {
@@ -52,7 +50,6 @@ export const babelParserMapping = {
       '@babel/plugin-proposal-object-rest-spread',
       "@babel/plugin-syntax-typescript",
       "@babel/plugin-transform-react-jsx",
-      "@babel/plugin-proposal-class-properties",
     ]
   },
 }
