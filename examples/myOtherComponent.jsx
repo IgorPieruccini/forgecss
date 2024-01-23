@@ -1,4 +1,4 @@
-import { ComponentInDir } from "./components/componentInDir"
+import { ComponentInDir } from "./components"
 
 export const OtherComponent = () => {
   return <div>

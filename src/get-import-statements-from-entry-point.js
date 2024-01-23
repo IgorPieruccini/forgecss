@@ -1,36 +1,6 @@
 import { getFilesFromDirectory } from "./get-files-from-directory.js";
+import fs from "fs";
 import getImportStatementsUrlFromFile from "./get-import-statements-url-from-file.js"
-import { readContentFromFile } from "./read-content-from-file.js";
-
-const getSourceCodeDirectory = (path) => {
-  const sourceCodePath = path.split("/");
-  if (sourceCodePath.length <= 2) {
-    return path;
-  }
-  sourceCodePath.pop();
-  return sourceCodePath.join("/");
-}
-
-const getFileNameFromPath = (path) => {
-  const parts = path.split("/");
-  if (!parts || parts.length === 0) throw `Error: path: ${path} is not a directory`;
-  return parts[parts.length - 1];
-}
-
-
-const getFileExtention = (sourceCodeDirectory, filePath) => {
-  if (!sourceCodeDirectory) return filePath;
-  const filesInsideDirectoy = getFilesFromDirectory(sourceCodeDirectory, ["jsx", "tsx", "js", "ts"]);
-  if (filesInsideDirectoy.length === 0) throw "Error: No file in the current directory"
-  const fileName = getFileNameFromPath(filePath);
-  const fileExtention = filesInsideDirectoy.find((dir) => { return dir.includes(`${fileName}.`) });
-  if (!fileExtention) throw `Error: could not find a file that matches ${filePath}`
-  return fileExtention.split(".").reverse()[0];
-}
-
-const pathIncludeFileExtention = (path, extention) => {
-  return extention.some(ext => path.includes(`.${ext}`));
-}
 
 const transformPathToAbsolute = (path) => {
   const currentPath = path.replace(/\b\.\//g, '/');
@@ -48,38 +18,79 @@ const transformPathToAbsolute = (path) => {
   return joinedParts;
 }
 
-export default async (entryPoint, fileExtensions) => {
-  let urls = [];
 
-  const getImportStatementRecusive = async (path, sourceCodeDirectory) => {
-    console.log(`------- ${path} -------`);
-    const filePath = transformPathToAbsolute(`${sourceCodeDirectory || ''}${path}`);
+const getImportStatement = async (importStatementPath, previousPaths) => {
+  console.log("   ");
+  // console.log(`analyzing: ---${importStatementPath}---`);
+  // console.log(`Previous path: ${previousPaths}`);
+  const absoluteFilePath = transformPathToAbsolute(`${previousPaths || ""}${previousPaths ? "/" : ""}${importStatementPath}`)
+  console.log(`Absolute file path: ${absoluteFilePath}`);
 
-    const includeExtension = pathIncludeFileExtention(filePath, fileExtensions);
-    const sourceCodeDir = getSourceCodeDirectory(filePath);
+  const urlParts = absoluteFilePath.split("/");
+  const currentImportStatementDirectory = urlParts.slice(0, urlParts.length - 1).join("/");
+  const currentImportStatementFileName = urlParts[urlParts.length - 1];
 
-    let fileWithExtention = "";
-    if (includeExtension) {
-      fileWithExtention = filePath;
-    } else {
-      try {
-        const fileExtention = getFileExtention(sourceCodeDir, filePath);
-      } catch (e) {
-        console.warn(`skipping node package import`, sourceCodeDir, filePath);
-        // return earlier as it's a node package imported
+  try {
+    if (!fs.existsSync(absoluteFilePath)) {
+      throw `looking for filename: ${absoluteFilePath}`
+    }
+
+    const pathIsDirectory = fs.lstatSync(absoluteFilePath).isDirectory();
+
+    if (pathIsDirectory) {
+      const filesInsideDirectory = getFilesFromDirectory(absoluteFilePath, ["jsx", "tsx", "js", "ts"]);
+      console.log({ filesInsideDirectory });
+      const foundedFile = filesInsideDirectory.find((dir) => dir.includes(`/index.`));
+
+      if (!foundedFile) {
+        console.log(`No file in path:  ${absoluteFilePath}`);
         return;
+      }
+
+      const extension = foundedFile.split(".").reverse()[0];
+      const newPath = `${absoluteFilePath}/index.${extension}`;
+      await getImportStatement(newPath);
+
+    } else {
+      const importUrls = await getImportStatementsUrlFromFile(absoluteFilePath);
+      console.log({ importUrls });
+
+      for (let i = 0; i < importUrls.length; i++) {
+        const url = importUrls[i];
+        await getImportStatement(url, currentImportStatementDirectory);
       }
     }
 
-    urls.push(fileWithExtention);
-
-    const importUrls = await getImportStatementsUrlFromFile(fileWithExtention);
-
-    for (let i = 0; i < importUrls.length; i++) {
-      const url = importUrls[i];
-      await getImportStatementRecusive(url, sourceCodeDir + "/");
+  } catch (e) {
+    // console.log(e);
+    if (!fs.existsSync(currentImportStatementDirectory)) {
+      // code getting here without being a pack
+      console.log("import pack")
+      // package import
+      return;
     }
+
+    const filesInsideDirectoy = getFilesFromDirectory(currentImportStatementDirectory, ["jsx", "tsx", "js", "ts"]);
+    const foundedFile = filesInsideDirectoy.find((dir) => dir.includes(`${currentImportStatementFileName}.`));
+
+    if (!foundedFile) {
+      console.log(`skipping ${absoluteFilePath}`);
+      return;
+    }
+
+    const extension = foundedFile.split(".").reverse()[0];
+    await getImportStatement(`${absoluteFilePath}.${extension}`);
   }
-  await getImportStatementRecusive(entryPoint);
+}
+
+export default async (entryPoint, fileExtensions) => {
+  let urls = [];
+
+  const urlParts = entryPoint.split("/");
+  const path = urlParts.slice(0, urlParts.length - 1).join("/");
+  const fileName = urlParts[urlParts.length - 1];
+
+  await getImportStatement(fileName, path);
+
   return urls;
 }
