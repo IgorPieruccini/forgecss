@@ -5,22 +5,23 @@ import writeToFile from "./src/write-to-file.js";
 import { getCssClassesUsedByAllFilesInDirectory } from "./src/get-classes-used-by-files-in-directory.js";
 import { createTemplatesFromClassesInUse } from "./src/create-template-from-classes-in-use.js";
 
+export const forgecssConfig = await readContentFromFile("./forge.config.json", "json");
+
 const init = async () => {
   try {
-    const config = await readContentFromFile("./forge.config.json", "json");
 
     const {
       classesInUse,
       cssVariablesInUse,
-    } = await getCssClassesUsedByAllFilesInDirectory(config);
+    } = await getCssClassesUsedByAllFilesInDirectory(forgecssConfig);
 
     const content = createTemplatesFromClassesInUse(
       classesInUse,
       cssVariablesInUse,
-      config.variant
+      forgecssConfig.variant
     );
 
-    await writeToFile(content, config.outDir);
+    await writeToFile(content, forgecssConfig.outDir);
 
     console.log("Your customized classes are generated, check forge.css");
   } catch (error) { console.log(error); }

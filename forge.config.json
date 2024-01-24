@@ -32,5 +32,18 @@
     "justify-content": "justify-to",
     "flex-direction": "flex-dir",
     "align-items": "align-to"
+  },
+  "resolve": {
+    "alias": {
+      "App": "./src/App.js",
+      "state": "./src/state",
+      "shared": "./src/shared",
+      "authentication": "./src/authentication",
+      "support": "./src/support",
+      "test": "./src/test",
+      "elearning": "./src/elearning",
+      "gamification": "./src/gamification",
+      "account": "./src/account"
+    }
   }
 }
