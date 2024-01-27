@@ -6,6 +6,12 @@ import { forgecssConfig } from "../index.js";
 
 const possibleExtensions = ['.js', '.jsx', '.ts', '.tsx']; // Add more extensions if needed
 
+const hasExtention = (extensions, absolutePath) => {
+  const ext = path.extname(absolutePath);
+  if (!ext) return false;
+  return extensions.includes(ext);
+}
+
 // If the import statement does not include a file extension, try to find one
 const findAndAttachFileExtension = (absolutePath) => {
   for (const extension of possibleExtensions) {
@@ -33,19 +39,19 @@ const extractPaths = (pathNode, filepath) => {
   try {
     const absolutePath = path.isAbsolute(importDecalrationUrl) ? importDecalrationUrl : path.resolve(path.dirname(filepath), importDecalrationUrl);
 
-    if (!path.extname(absolutePath)) {
+    if (!hasExtention(possibleExtensions, absolutePath)) {
       const fileWithExtension = findAndAttachFileExtension(absolutePath);
-      if (fileWithExtension) return fileWithExtension;
+      if (fileWithExtension) return [fileWithExtension, "url"];
       const indexFile = findIndexFileWithAnyExtention(absolutePath);
-      if (indexFile) return indexFile;
+      if (indexFile) return [indexFile, "url"];
     }
 
     const resolveAlias = forgecssConfig.resolve.alias;
-    console.log("looking for alias", absolutePath);
 
     const pathIsUsingAlias = Object.entries(resolveAlias).find(([key]) => {
-      return absolutePath.includes(key);
+      return importDecalrationUrl.startsWith(key);
     });
+
 
     if (pathIsUsingAlias) {
       const [key, alias] = pathIsUsingAlias;
@@ -55,14 +61,13 @@ const extractPaths = (pathNode, filepath) => {
         const aliasUrlAbsolute = path.isAbsolute(aliasUrl) ? aliasUrl : path.resolve(path.dirname(""), aliasUrl);
 
         const fileWithExtension = findAndAttachFileExtension(aliasUrlAbsolute);
-        if (fileWithExtension) return fileWithExtension;
+        if (fileWithExtension) return [fileWithExtension, "url"];
         const indexFile = findIndexFileWithAnyExtention(aliasUrlAbsolute);
-        if (indexFile) return indexFile;
+        if (indexFile) return [indexFile, "url"];
       }
     }
 
-    console.log("file not match");
-    return null;
+    return [absolutePath, "not found"];
   }
   catch (e) {
     console.log("ERROR", e);
@@ -75,19 +80,21 @@ export default async (filepath, extensions) => {
   if (!astNode) return [];
 
   const importUrls = [];
+  const notFoundUrls = [];
 
   traverse.default(astNode, {
     enter() { },
     ImportDeclaration: (path) => {
-      const url = extractPaths(path, filepath);
-      if (url) importUrls.push(url)
+      const [url, type] = extractPaths(path, filepath);
+      if (url && type === "url") importUrls.push(url);
+      if (url && type === "not found") notFoundUrls.push(url);
     },
     ExportAllDeclaration: (path) => {
-      const url = extractPaths(path, filepath);
-      if (url) importUrls.push(url)
+      const [url, type] = extractPaths(path, filepath);
+      if (url && type === "url") importUrls.push(url);
+      if (url && type === "not found") notFoundUrls.push(url);
     }
   });
 
-  return importUrls;
-
+  return { importUrls, notFoundUrls };
 }
