@@ -8,11 +8,11 @@ import writeToFile from "./write-to-file.js";
   *
   * Uses the sourceDir and fileExtensions from the config to look for files with classes included in alias object.
   */
-export const getCssClassesUsedByAllFilesInDirectory = async (config) => {
+export const getCssClassesUsedByAllFilesInDirectory = async () => {
   const classesInUse = {};
   let cssVariablesInUse = [];
 
-  const { foundUrls, notFoundUrls } = await getImportStatementsFromEntryPoint(config.entry, config.fileExtensions);
+  const { foundUrls, notFoundUrls } = await getImportStatementsFromEntryPoint();
   writeToFile(`{"urls":${JSON.stringify(foundUrls)}}`, "./forgecss.log.json");
   writeToFile(`{"urls":${JSON.stringify(notFoundUrls)}}`, "./forgecss.failed.log.json");
 
@@ -21,7 +21,7 @@ export const getCssClassesUsedByAllFilesInDirectory = async (config) => {
     const {
       classesInUse: classesInUseFromFile,
       cssVariablesInUse: cssVariablesInUseFromFile,
-    } = await getCssClassesUsedByFile(path, config.alias);
+    } = await getCssClassesUsedByFile(path);
 
     if (Object.keys(classesInUseFromFile).length > 0 || Object.keys(cssVariablesInUseFromFile).length > 0) {
       console.log(path, { classesInUseFromFile, cssVariablesInUseFromFile })

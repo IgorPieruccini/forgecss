@@ -1,3 +1,4 @@
+import { forgecssConfig } from "../index.js";
 import generateTemplate from "./generate-template.js"
 import { placement } from "./placements.js";
 
@@ -32,8 +33,8 @@ const variantMap = {
 export const createTemplatesFromClassesInUse = (
   classesInUse,
   cssVariablesInUse,
-  variants
 ) => {
+  let variants = forgecssConfig.variant;
   // join variants from forge Config and default css placements
   variants = {
     ...variants,

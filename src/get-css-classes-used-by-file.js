@@ -3,6 +3,7 @@ import traverse from "@babel/traverse";
 import { getAliasesFromForgeConfig } from "./get-aliases-from-forge-config.js";
 import { readContentFromFile } from "./read-content-from-file.js";
 import getAstFromFile from "./get-ast-from-file.js";
+import { forgecssConfig } from "../index.js";
 
 /**
   * Get css classes used by file
@@ -10,9 +11,9 @@ import getAstFromFile from "./get-ast-from-file.js";
   * @param {object} configAlias -The aliases from forge config
   * @returns {object} Returns object with {classesInUse: [...], cssVariablesInUse: [...]}
   * */
-export const getCssClassesUsedByFile = async (path, configAlias) => {
+export const getCssClassesUsedByFile = async (path) => {
   const astNode = await getAstFromFile(path);
-  const aliases = await getAliasesFromForgeConfig(configAlias);
+  const aliases = await getAliasesFromForgeConfig(forgecssConfig.alias);
 
   const classesInUse = {};
   const cssVariablesInUse = [];
