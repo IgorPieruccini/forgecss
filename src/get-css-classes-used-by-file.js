@@ -36,7 +36,8 @@ export const getCssClassesUsedByFile = async (path) => {
             const currentClassesInUse = aliasArray.filter(alias => {
               return classes.some((className) => {
                 if (alias === className) return true
-                const regexPattern = new RegExp(`${alias}-[a-zA-Z0-9]+$`);
+                // TODO: the alias needs to check for space before
+                const regexPattern = new RegExp(`(?<![a-zA-Z0-9])${alias}-[a-zA-Z0-9]+$`);
                 const regexPatternCssVariable = new RegExp(`${alias}-(.*?)( |$)`);
                 if (regexPattern.test(className)) {
                   const cssVar = regexPatternCssVariable.exec(className)[1];
